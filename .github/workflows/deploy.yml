@@ -55,7 +55,7 @@ jobs:
             **/tests/**
             **/.github/**
 
-      - name: 🔐 Ejecutar comandos en servidor (SSH)XXX
+      - name: 🔐 Ejecutar comandos en servidor (SSH) - Rerun
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
