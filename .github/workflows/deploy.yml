@@ -1,0 +1,82 @@
+name: 🚀 Deploy Laravel (Hostinger)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: 📦 Install dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: ⚙️ Crear .env
+        run: echo "${{ secrets.ENV }}" > .env
+
+      - name: 🏗️ Optimizar Laravel
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      # 👉 .htaccess en raíz (NO en public)
+      - name: 📄 Crear .htaccess raíz
+        run: |
+          cat <<EOF > .htaccess
+          <IfModule mod_rewrite.c>
+              RewriteEngine On
+
+              RewriteCond %{REQUEST_URI} !^/public/
+              RewriteRule ^(.*)$ public/$1 [L]
+          </IfModule>
+          EOF
+
+      - name: 📤 Deploy por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.PROJECT_PATH }}
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            **/tests/**
+            **/.github/**
+
+      - name: 🔐 Ejecutar comandos en servidor (SSH)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+
+            echo "📦 Composer install..."
+            composer install --no-dev --optimize-autoloader
+
+            echo "🔑 Generando APP_KEY..."
+            php artisan key:generate --force
+
+            echo "🗄️ Migraciones..."
+            php artisan migrate --force
+
+            echo "⚡ Cache..."
+            php artisan config:cache
+
+            echo "🔓 Permisos..."
+            chmod -R 775 storage bootstrap/cache
+
+            echo "✅ Deploy terminado"
