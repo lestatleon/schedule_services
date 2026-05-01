@@ -54,6 +54,7 @@ jobs:
             **/node_modules/**
             **/tests/**
             **/.github/**
+            **/vendor/**
 
       - name: 🔐 Ejecutar comandos en servidor (SSH) - Rerun
         uses: appleboy/ssh-action@v1.0.3
