@@ -63,21 +63,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # cd ${{ secrets.PROJECT_PATH }}
-
-            echo "📦 Composer install..."
             composer install --no-dev --optimize-autoloader
-
-            # echo "🔑 Generando APP_KEY..."
-            # php artisan key:generate --force
-
-            echo "🗄️ Migraciones..."
             php artisan migrate --force
-
-            echo "⚡ Cache..."
             php artisan config:cache
-
-            echo "🔓 Permisos..."
             chmod -R 775 storage bootstrap/cache
-
             echo "✅ Deploy terminado"
