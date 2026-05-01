@@ -64,7 +64,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 65002
           script: |
+            pwd
             cd ${{ secrets.PROJECT_PATH }}
+            pwd
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
