@@ -63,13 +63,13 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ${{ secrets.PROJECT_PATH }}
+            # cd ${{ secrets.PROJECT_PATH }}
 
             echo "📦 Composer install..."
             composer install --no-dev --optimize-autoloader
 
-            echo "🔑 Generando APP_KEY..."
-            php artisan key:generate --force
+            # echo "🔑 Generando APP_KEY..."
+            # php artisan key:generate --force
 
             echo "🗄️ Migraciones..."
             php artisan migrate --force
