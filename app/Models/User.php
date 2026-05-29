@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -19,8 +20,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'uid',
+        'tenant_id',
         'name',
         'email',
+        'role',
         'password',
     ];
 
@@ -45,5 +49,39 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (self $user): void {
+            if (blank($user->uid)) {
+                $user->uid = (string) Str::uuid();
+            }
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'uid';
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return BelongsTo
+     */
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
     }
 }
