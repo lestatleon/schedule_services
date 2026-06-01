@@ -57,13 +57,20 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer): JsonResponse
     {
         $validated = $request->validate([
-            'tenant_id' => ['sometimes', 'integer', 'exists:tenants,id'],
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'phone' => ['sometimes', 'string', 'max:15'],
-            'mobile' => ['sometimes', 'string', 'max:15'],
-            'isWhatsapp' => ['sometimes', 'boolean'],
+            // 'tenant_id' => ['sometimes', 'integer', 'exists:tenants,id'],
+            // 'name' => ['sometimes', 'string', 'max:255'],
+            // 'email' => ['sometimes', 'email', 'max:255'],
+            // 'phone' => ['sometimes', 'string', 'max:15'],
+            // 'mobile' => ['sometimes', 'string', 'max:15'],
+            // 'isWhatsapp' => ['sometimes', 'boolean'],
+
+            'name' => ['required', 'string', 'max:255'],
+            'email' => 'max:255',
+            'mobile' => 'required|max:15',
+            'isWhatsapp' => 'boolean:strict',
         ]);
+
+        $validated['tenant_id'] = 1;
 
         $customer->update($validated);
 
