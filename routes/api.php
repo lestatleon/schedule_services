@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TenantController;
@@ -11,4 +12,5 @@ Route::apiResources([
     'users' => UserController::class,
     'customers' => CustomerController::class,
     'branches' => BranchController::class,
+    'appointments' => AppointmentController::class,
 ]);

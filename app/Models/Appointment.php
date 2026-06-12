@@ -4,36 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Customer extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'uid',
         'tenant_id',
-        'name',
-        'email',
-        'phone',
-        'mobile',
-        'isWhatsapp',
+        'branch_id',
+        'customer_id',
+        'date',
+        'time',
+        'duration',
     ];
 
     protected function casts(): array
     {
         return [
-            'isWhatsapp' => 'boolean',
+            'date' => 'date:Y-m-d',
+            'duration' => 'integer',
         ];
     }
 
     protected static function booted(): void
     {
-        static::creating(function (self $customer): void {
-            if (blank($customer->uid)) {
-                $customer->uid = (string) Str::uuid();
+        static::creating(function (self $appointment): void {
+            if (blank($appointment->uid)) {
+                $appointment->uid = (string) Str::uuid();
             }
         });
     }
@@ -48,8 +48,14 @@ class Customer extends Model
         return $this->belongsTo(Tenant::class);
     }
 
-    public function appointments(): HasMany
+    public function branch(): BelongsTo
     {
-        return $this->hasMany(Appointment::class);
+        return $this->belongsTo(Branch::class);
     }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }

@@ -47,4 +47,9 @@ class Tenant extends Model
     {
         return $this->hasMany(Branch::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

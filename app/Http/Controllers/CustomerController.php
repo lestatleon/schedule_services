@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerPostRequest;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,16 +15,11 @@ class CustomerController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Customer::query()->latest('id')->get(
-            [
-                'uid',
-                'name',
-                'email',
-                'phone',
-                'mobile',
-                'isWhatsapp',
-            ]
-        ));
+        return response()->json(
+            $this->serializeCustomers(
+                Customer::query()->latest('id')->get()
+            )
+        );
     }
 
     /**
@@ -32,15 +28,12 @@ class CustomerController extends Controller
     public function store(CustomerPostRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        // dump($validated);
-
-        // $validated->mergeIfMissing(['email' => 0]);
 
         $validated['tenant_id'] = 1;
 
         $customer = Customer::create($validated);
 
-        return response()->json($customer, 201);
+        return response()->json($this->serializeCustomer($customer), 201);
     }
 
     /**
@@ -48,7 +41,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer): JsonResponse
     {
-        return response()->json($customer);
+        return response()->json($this->serializeCustomer($customer));
     }
 
     /**
@@ -74,7 +67,7 @@ class CustomerController extends Controller
 
         $customer->update($validated);
 
-        return response()->json($customer->fresh());
+        return response()->json($this->serializeCustomer($customer->fresh()));
     }
 
     /**
@@ -85,5 +78,24 @@ class CustomerController extends Controller
         $customer->delete();
 
         return response()->json(status: 204);
+    }
+
+    private function serializeCustomers(Collection $customers): array
+    {
+        return $customers
+            ->map(fn (Customer $customer): array => $this->serializeCustomer($customer))
+            ->all();
+    }
+
+    private function serializeCustomer(Customer $customer): array
+    {
+        return [
+            'id' => $customer->uid,
+            'name' => $customer->name,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'mobile' => $customer->mobile,
+            'isWhatsapp' => $customer->isWhatsapp,
+        ];
     }
 }
