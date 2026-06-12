@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class TenantSeeder extends Seeder
 {
@@ -15,14 +14,16 @@ class TenantSeeder extends Seeder
     {
         DB::table('tenants')->insert([
             [
-                'uid' =>  Str::uuid()->toString(),
-                'name' => 'Tenant Test',
-                'plan' => 'basic'
+                'id' => 1,
+                'uid' =>  '048d73d1-9455-4664-81fa-b9b4eb0ec854',
+                'name' => 'Tenant Basic',
+                'plan' => 'Basic'
             ],
             [
-                'uid' => Str::uuid()->toString(),
-                'name' => 'Tenant Test 2',
-                'plan' => 'premium'
+                'id' => 2,
+                'uid' => '41dc9e42-ed6a-4268-a1d9-2e14f2beaebd',
+                'name' => 'Tenant Premium',
+                'plan' => 'Premium'
             ],
         ]);
     }
