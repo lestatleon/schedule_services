@@ -23,7 +23,7 @@ class AppointmentController extends Controller
         return response()->json(
             $this->serializeAppointments(
                 Appointment::query()
-                    ->with(['branch', 'customer'])
+                    ->with(['tenant', 'branch', 'customer'])
                     ->latest('id')
                     ->get()
             )
@@ -37,7 +37,7 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'customer_id' => ['required'],
-            // 'branch_id' => ['required'],
+            'branch_id' => ['required'],
             'date' => ['required', 'date'],
             'time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'duration' => ['required', 'integer', 'min:1'],

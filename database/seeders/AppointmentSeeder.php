@@ -40,7 +40,7 @@ class AppointmentSeeder extends Seeder
                 'customer_id' => 3,
                 'branch_id' => 1,
                 'date' => '2026-06-16',
-                'time' => '12:30:00',
+                'time' => '12:00:00',
                 'duration' => 60
             ],
             [
@@ -50,7 +50,7 @@ class AppointmentSeeder extends Seeder
                 'customer_id' => 4,
                 'branch_id' => 2,
                 'date' => '2026-06-17',
-                'time' => '15:15:00',
+                'time' => '15:00:00',
                 'duration' => 60
             ],
             [
