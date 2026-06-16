@@ -16,11 +16,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::apiResources([
-        'tenants' => TenantController::class,
-        'users' => UserController::class,
-        'customers' => CustomerController::class,
-        'branches' => BranchController::class,
-        'appointments' => AppointmentController::class,
-    ]);
+    Route::middleware('verify-tenant')->group(function () {
+        Route::apiResources([
+            'tenants' => TenantController::class,
+            'users' => UserController::class,
+            'customers' => CustomerController::class,
+            'branches' => BranchController::class,
+            'appointments' => AppointmentController::class,
+        ]);
+    });
 });

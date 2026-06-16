@@ -24,6 +24,7 @@ class CustomerPostRequest extends FormRequest
             'email' => 'max:255',
             'mobile' => 'required|max:15',
             'isWhatsapp' => 'boolean:strict',
+            'phone' => '',
         ];
         // 'tenant_id' => ['required', 'integer', 'exists:tenants,id'],
     }

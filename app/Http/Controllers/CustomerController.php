@@ -13,11 +13,14 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         return response()->json(
             $this->serializeCustomers(
-                Customer::query()->latest('id')->get()
+                Customer::query()
+                    ->whereRelation('tenant', 'id', $request->header('Tenant'))
+                    ->latest('id')
+                    ->get()
             )
         );
     }
@@ -29,7 +32,7 @@ class CustomerController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['tenant_id'] = 1;
+        $validated['tenant_id'] = $request->header('Tenant');
 
         $customer = Customer::create($validated);
 
@@ -91,6 +94,7 @@ class CustomerController extends Controller
     {
         return [
             'id' => $customer->uid,
+            'tenant' => $customer->tenant_id,
             'name' => $customer->name,
             'email' => $customer->email,
             'phone' => $customer->phone,

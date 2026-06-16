@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CustomerSeeder extends Seeder
 {
@@ -60,6 +61,56 @@ class CustomerSeeder extends Seeder
                 'name' => 'Taylor Swift',
                 'email' => 'taylor.swift13@samplemail.org',
                 'mobile' => '5534567890',
+                'isWhatsapp' => true,
+                'phone' => '',
+            ],
+            [
+                'id' => 6,
+                'uid' => Str::uuid(),
+                'tenant_id' => 2,
+                'name' => 'Satya Nadella',
+                'email' => 'SatyaNadella@samplemail.org',
+                'mobile' => '5510001001',
+                'isWhatsapp' => true,
+                'phone' => '',
+            ],
+            [
+                'id' => 7,
+                'uid' => Str::uuid(),
+                'tenant_id' => 2,
+                'name' => 'Tim Cook',
+                'email' => 'TimCook@samplemail.org',
+                'mobile' => '5510001002',
+                'isWhatsapp' => true,
+                'phone' => '',
+            ],
+            [
+                'id' => 8,
+                'uid' => Str::uuid(),
+                'tenant_id' => 2,
+                'name' => 'Sundar Pichai',
+                'email' => 'SundarPichai@samplemail.org',
+                'mobile' => '5510001003',
+                'isWhatsapp' => true,
+                'phone' => '',
+            ],
+            [
+                'id' => 9,
+                'uid' => Str::uuid(),
+                'tenant_id' => 2,
+                'name' => 'Jensen Huang',
+                'email' => 'JensenHuang@samplemail.org',
+                'mobile' => '5510001004',
+                'isWhatsapp' => true,
+                'phone' => '',
+            ],
+            [
+                'id' => 10,
+                'uid' => Str::uuid(),
+                'tenant_id' => 2,
+                'name' => 'Mark Zuckerberg',
+                'email' => 'MarkZuckerberg@samplemail.org',
+                'mobile' => '5510001005',
                 'isWhatsapp' => true,
                 'phone' => '',
             ],

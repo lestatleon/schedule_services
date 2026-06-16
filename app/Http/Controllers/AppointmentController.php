@@ -18,12 +18,13 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         return response()->json(
             $this->serializeAppointments(
                 Appointment::query()
-                    ->with(['tenant', 'branch', 'customer'])
+                    ->whereRelation('tenant', 'id', $request->header('Tenant'))
+                    ->with(['branch', 'customer'])
                     ->latest('id')
                     ->get()
             )
@@ -118,6 +119,9 @@ class AppointmentController extends Controller
         return response()->json(status: 204);
     }
 
+    /**
+     * Undocumented function
+     */
     private function serializeAppointments(Collection $appointments): array
     {
         return $appointments
@@ -125,13 +129,16 @@ class AppointmentController extends Controller
             ->all();
     }
 
+    /**
+     * Undocumented function
+     */
     private function serializeAppointment(Appointment $appointment): array
     {
         $appointment->loadMissing(['tenant', 'branch', 'customer']);
 
         return [
             'id' => $appointment->uid,
-            'tenant_id' => $appointment->tenant?->uid ?? (string) $appointment->tenant_id,
+            // 'tenant_id' => $appointment->tenant?->uid ?? (string) $appointment->tenant_id,
             'branch_id' => $appointment->branch?->uid ?? (string) $appointment->branch_id,
             'customer_id' => $appointment->customer?->uid ?? (string) $appointment->customer_id,
             'date' => $appointment->date?->format('Y-m-d'),
@@ -140,11 +147,17 @@ class AppointmentController extends Controller
         ];
     }
 
+    /**
+     *
+     */
     private function normalizeTime(string $time): string
     {
         return strlen($time) === 5 ? "{$time}:00" : $time;
     }
 
+    /**
+     *
+     */
     private function resolveTenantId(Customer $customer, Branch $branch): int
     {
         if ($customer->tenant_id !== $branch->tenant_id) {
@@ -156,16 +169,26 @@ class AppointmentController extends Controller
         return $customer->tenant_id;
     }
 
+    /**
+     *
+     */
     private function resolveCustomer(mixed $identifier): Customer
     {
         return $this->resolveModel(Customer::query(), $identifier, 'customer_id', 'uid');
     }
 
+    /**
+     *
+     */
     private function resolveBranch(mixed $identifier): Branch
     {
         return $this->resolveModel(Branch::query(), $identifier, 'branch_id', 'uid');
     }
 
+    /**
+     * Undocumented function
+     *
+     */
     private function resolveModel($query, mixed $identifier, string $field, string $publicKey)
     {
         $model = is_numeric($identifier)

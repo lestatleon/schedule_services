@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(Branch::query()->latest('id')->get());
+        return response()->json(
+            $this->serializeBranches(
+                Branch::query()
+                    ->whereRelation('tenant', 'id', $request->header('Tenant'))
+                    ->latest('id')
+                    ->get()
+            )
+        );
     }
 
     /**
@@ -22,7 +30,7 @@ class BranchController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'tenant_id' => ['required', 'integer', 'exists:tenants,id'],
+            // 'tenant_id' => ['required', 'integer', 'exists:tenants,id'],
             'name' => ['required', 'string', 'max:255'],
         ]);
 
@@ -62,5 +70,20 @@ class BranchController extends Controller
         $branch->delete();
 
         return response()->json(status: 204);
+    }
+
+    private function serializeBranches(Collection $branches): array
+    {
+        return $branches
+            ->map(fn (Branch $branch): array => $this->serializeBranch($branch))
+            ->all();
+    }
+
+    private function serializeBranch(Branch $branch): array
+    {
+        return [
+            'id' => $branch->uid,
+            'name' => $branch->name,
+        ];
     }
 }
