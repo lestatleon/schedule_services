@@ -12,8 +12,6 @@ use Illuminate\Validation\ValidationException;
 
 class AppointmentController extends Controller
 {
-    public $tenant_id = 1;
-    public $branch_id = 1;
 
     /**
      * Display a listing of the resource.
@@ -42,14 +40,15 @@ class AppointmentController extends Controller
             'date' => ['required', 'date'],
             'time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'duration' => ['required', 'integer', 'min:1'],
+            'notes' => ['max:250'],
         ]);
 
         $customer = $this->resolveCustomer($validated['customer_id']);
-        $branch = $this->resolveBranch(1);
+        $branch = $this->resolveBranch($validated['branch_id']);
 
         $validated['time'] = $this->normalizeTime($validated['time']);
         $validated['customer_id'] = $customer->id;
-        $validated['branch_id'] = 1;
+        $validated['branch_id'] = $branch->id;
         $validated['tenant_id'] = $this->resolveTenantId($customer, $branch);
 
         $appointment = Appointment::create($validated);
@@ -80,6 +79,7 @@ class AppointmentController extends Controller
             'date' => ['sometimes', 'date'],
             'time' => ['sometimes', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'duration' => ['sometimes', 'integer', 'min:1'],
+            'notes' => ['max:250']
         ]);
 
         if (isset($validated['time'])) {
@@ -141,8 +141,10 @@ class AppointmentController extends Controller
             // 'tenant_id' => $appointment->tenant?->uid ?? (string) $appointment->tenant_id,
             'branch_id' => $appointment->branch?->uid ?? (string) $appointment->branch_id,
             'customer_id' => $appointment->customer?->uid ?? (string) $appointment->customer_id,
+            'customer_name' => $appointment->customer?->name,
             'date' => $appointment->date?->format('Y-m-d'),
             'time' => $appointment->time,
+            'notes' => $appointment->notes,
             'duration' => $appointment->duration,
         ];
     }

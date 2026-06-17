@@ -21,6 +21,7 @@ class AppointmentSeeder extends Seeder
                 'branch_id' => 1,
                 'date' => '2026-06-15',
                 'time' => '09:00:00',
+                'notes' => '',
                 'duration' => 60
             ],
             [
@@ -31,6 +32,7 @@ class AppointmentSeeder extends Seeder
                 'branch_id' => 1,
                 'date' => '2026-06-15',
                 'time' => '10:00:00',
+                'notes' => 'algunas notas',
                 'duration' => 60
             ],
             [
@@ -41,6 +43,7 @@ class AppointmentSeeder extends Seeder
                 'branch_id' => 1,
                 'date' => '2026-06-16',
                 'time' => '12:00:00',
+                'notes' => '',
                 'duration' => 60
             ],
             [
@@ -51,6 +54,7 @@ class AppointmentSeeder extends Seeder
                 'branch_id' => 2,
                 'date' => '2026-06-17',
                 'time' => '15:00:00',
+                'notes' => '',
                 'duration' => 60
             ],
             [
@@ -61,6 +65,7 @@ class AppointmentSeeder extends Seeder
                 'branch_id' => 2,
                 'date' => '2026-06-18',
                 'time' => '17:00:00',
+                'notes' => 'notas de prueba',
                 'duration' => 60
             ],
         ]);

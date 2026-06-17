@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->unsignedInteger('duration');
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
