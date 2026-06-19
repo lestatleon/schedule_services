@@ -17,19 +17,22 @@ class BranchSeeder extends Seeder
                 'id' => 1,
                 'uid' =>  '86477471-6029-4087-a3a5-d26b3455153f',
                 'tenant_id' => 1,
-                'name' => 'Pricipal',
+                'name' => 'Principal',
+                'default' => true,
             ],
             [
                 'id' => 2,
                 'uid' =>  '85778051-55ce-424b-a1e3-8b96b58ef139',
                 'tenant_id' => 1,
                 'name' => 'Foranea',
+                'default' => false,
             ],
             [
                 'id' => 3,
                 'uid' =>  'a7468073-f3be-41cc-8c06-036cb85ccf2d',
                 'tenant_id' => 2,
                 'name' => 'Principal',
+                'default' => true,
             ],
         ]);
     }

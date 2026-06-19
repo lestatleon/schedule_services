@@ -15,6 +15,7 @@ class Branch extends Model
         'uid',
         'tenant_id',
         'name',
+        'default',
     ];
 
     protected static function booted(): void

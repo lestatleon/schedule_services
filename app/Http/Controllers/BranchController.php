@@ -32,6 +32,7 @@ class BranchController extends Controller
         $validated = $request->validate([
             // 'tenant_id' => ['required', 'integer', 'exists:tenants,id'],
             'name' => ['required', 'string', 'max:255'],
+            'default' => ['required', 'boolean'],
         ]);
 
         $branch = Branch::create($validated);
@@ -55,6 +56,7 @@ class BranchController extends Controller
         $validated = $request->validate([
             'tenant_id' => ['sometimes', 'integer', 'exists:tenants,id'],
             'name' => ['sometimes', 'string', 'max:255'],
+            'default' => ['required', 'boolean'],
         ]);
 
         $branch->update($validated);
@@ -84,6 +86,7 @@ class BranchController extends Controller
         return [
             'id' => $branch->uid,
             'name' => $branch->name,
+            'default' => $branch->default,
         ];
     }
 }

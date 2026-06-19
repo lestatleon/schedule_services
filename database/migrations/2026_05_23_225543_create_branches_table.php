@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uid')->unique();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->string('name');
+            $table->boolean('default')->default(false);
             $table->timestamps();
         });
     }
