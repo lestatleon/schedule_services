@@ -18,6 +18,15 @@ class Branch extends Model
         'default',
     ];
 
+    /**
+     * Los atributos que deben ser convertidos a tipos nativos.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'default' => 'boolean',
+    ];
+
     protected static function booted(): void
     {
         static::creating(function (self $branch): void {
